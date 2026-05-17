@@ -6,12 +6,28 @@ document.write(`
 
 
     <!-- Background Code-->
+    <img id="backgroundPoster" src="/public/backgrounds/anamorphicBackground.jpg" style="z-index:-999;">
     <video autoplay muted loop id="backgroundVideo" style="z-index:-1000;">
         <source src="https://elcmbucket.ethantwu.com/anamorphicBackground.mp4" type="video/mp4">
     </video>
     <link rel="stylesheet" href="/public/backgrounds/background.css">
     <script src="/public/backgrounds/index.js?version=1.0.0"></script>
-    
+
+    <script>
+    (function(){
+        var poster = document.getElementById("backgroundPoster");
+        var video = document.getElementById("backgroundVideo");
+        function fadeOutPoster(){
+            poster.style.opacity = "0";
+        }
+        if(video.readyState >= 3){
+            fadeOutPoster();
+        } else {
+            video.addEventListener("canplay", fadeOutPoster, { once: true });
+        }
+    })();
+    </script>
+
 `);
 
 function createMainTitle(title, belowContent){

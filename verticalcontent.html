@@ -180,11 +180,15 @@
             thumbnail.style.filter = "blur(8px)";
             thumbnail.style.transform = "scale(1.1)";
             
+            var videoReady = false;
             function onVideoReady(){
                 console.log("video ready, removing blur", videoPath);
+                videoReady = true;
                 thumbnail.style.filter = "none";
                 thumbnail.style.transform = "scale(1)";
+                videoContainer.style.cursor = "pointer";
             }
+            videoContainer.style.cursor = "wait";
             video.addEventListener('canplaythrough', onVideoReady, { once: true });
 
             var videoSource = document.createElement("source");
@@ -208,6 +212,7 @@
             videoContainer.appendChild(likesOverlay);
             videoContainer.appendChild(commentsOverlay);
             videoContainer.addEventListener('mouseenter', ()=>{
+                if(!videoReady) return;
                 video.play();
                 thumbnail.classList.remove("visFade");
                 thumbnail.classList.add("invisFade");
@@ -215,13 +220,12 @@
                 watchButton.classList.add("slide-in-bottom-center");
             });
             videoContainer.addEventListener('mouseleave', async ()=>{
-                
+                if(!videoReady) return;
                 thumbnail.classList.remove("invisFade");
                 thumbnail.classList.add("visFade");
                 video.pause();
                 watchButton.classList.remove("slide-in-bottom-center");
                 watchButton.classList.add("slide-in-bottom-center-reverse");
-            
             });
 
             return videoContainer;

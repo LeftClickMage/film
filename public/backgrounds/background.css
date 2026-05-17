@@ -1,8 +1,18 @@
-#backgroundVideo{
+#backgroundVideo,
+#backgroundPoster {
     position: fixed;
     min-width: 101%;
     min-height: 101%;
-    left:0;
-    top:0;
+    width: 101%;
+    height: 101%;
+    object-fit: cover;
+    left: 0;
+    top: 0;
     filter: brightness(70%);
+}
+
+#backgroundPoster {
+    opacity: 1;
+    transition: opacity 800ms ease;
+    pointer-events: none;
 }
