@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="icon" type="image/jpeg" href="/public/logos/lcm-logo.png">
+
+        <title>Ethan Twu - Vertical Content</title>
+        <meta name="description" content="Vertical content by Ethan Twu / ELCM Studio.">
+        <meta name="keywords" content="LeftClickMage, Ethan Twu, vertical content, reels, instagram">
+
+        <link rel="canonical" href="https://ethantwu.com/verticalcontent.html">
+        <link rel="stylesheet" href="/public/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/public/fonts/font.css?version=1.0.0">
+        <link rel="stylesheet" href="/public/slideAnimations.css?version=1.0.0">
+        
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Special+Gothic+Condensed+One&display=swap" rel="stylesheet">
+        <script src="/public/js/bootstrap.bundle.min.js"></script>
+        <style>
+            @keyframes invisFade {
+                0%{
+                    opacity:1;
+                    scale: 1;
+                }
+                80%{
+                    opacity:0;
+                }
+                100%{
+                    opacity:0;
+                    scale:1.06;
+                }
+            }
+            @keyframes visFade {
+                0%{
+                    opacity:0;
+                    scale: 1.06;
+                }
+                80%{
+                    opacity:1;
+                }
+                100%{
+                    opacity:1;
+                    scale:1;
+                }
+            }
+            body{
+                background-color: rgb(84, 98, 45);
+            }
+            .invisFade {
+                animation: invisFade 700ms ease forwards;
+            }
+            .visFade {
+                animation: visFade 700ms ease forwards;
+            }
+        </style>
+    </head>
+    <body>
+
+    <script src="/public/headerDetail.js?version=1.0.0"></script>
+
+    
+
+        
+
+    <script>
+
+        function createOverallDiv(title, delay, sectionVideos){
+            var overallDiv = document.createElement("div");
+            overallDiv.classList.add("container", "my-5");
+            document.body.appendChild(overallDiv);
+            overallDiv.appendChild(createTitle(title, delay, sectionVideos));
+            return overallDiv;
+        }
+
+        function createTitle(title, delay, sectionVideos){
+            var container = document.createElement("div");
+            container.classList.add("slide", "slide-in-bottomTitle-" + delay, "border-bottom", "border-3", "mb-4", "d-flex", "justify-content-between", "align-items-end");
+            var titleParagraph = document.createElement("p");
+            titleParagraph.innerHTML = title;
+            titleParagraph.classList.add("h1", "text-light", "mb-0");
+            container.appendChild(titleParagraph);
+
+            var muteButton = document.createElement("button");
+            muteButton.classList.add("btn", "btn-outline-light", "btn-sm", "mb-2");
+            muteButton.innerHTML = "UNMUTE";
+            var muted = true;
+            muteButton.onclick = () => {
+                muted = !muted;
+                sectionVideos.forEach(v => { v.muted = muted; });
+                muteButton.innerHTML = muted ? "UNMUTE" : "MUTE";
+            };
+            container.appendChild(muteButton);
+
+            return container;
+        }
+
+        function createRow(padding = 4){
+            var overallRow = document.createElement("div");
+            overallRow.classList.add("row", "g-" + padding, "mb-4");
+            return overallRow;
+        }
+
+        function createColumn(delay){
+            var column = document.createElement("div");
+            column.classList.add("slide", "slide-in-bottom-" + delay, "col-xl-3", "col-sm-6");
+            return column;
+        }
+
+        var THUMB_WORKER_URL = "https://ig-thumb.leftclickmage.workers.dev";
+
+        function formatCount(n){
+            if(n == null) return "";
+            if(n >= 1000000) return (n/1000000).toFixed(1).replace(/\.0$/, "") + "M";
+            if(n >= 1000) return (n/1000).toFixed(1).replace(/\.0$/, "") + "K";
+            return String(n);
+        }
+
+        function loadReelData(linkPath, imgElement, likesElement, commentsElement){
+            fetch(THUMB_WORKER_URL + "?url=" + encodeURIComponent(linkPath))
+                .then(r => r.json())
+                .then(data => {
+                    if(data.image) imgElement.src = data.image;
+                    if(data.likes != null) likesElement.innerHTML = "♥ " + formatCount(data.likes);
+                    if(data.comments != null) commentsElement.innerHTML = "💬 " + formatCount(data.comments);
+                })
+                .catch(() => {});
+        }
+
+        function createCountOverlay(position){
+            var el = document.createElement("div");
+            el.style.position = "absolute";
+            el.style.bottom = "8px";
+            el.style[position] = "8px";
+            el.style.color = "white";
+            el.style.fontWeight = "bold";
+            el.style.fontSize = "1rem";
+            el.style.textShadow = "0 1px 3px rgba(0,0,0,0.8)";
+            el.style.zIndex = "2";
+            el.style.pointerEvents = "none";
+            return el;
+        }
+
+        function createVideo(videoPath, linkPath, sectionVideos){
+            var videoContainer = document.createElement("div");
+            videoContainer.classList.add("position-relative", "rounded");
+            videoContainer.style.overflow = "hidden";
+            videoContainer.style.aspectRatio = "9 / 16";
+            videoContainer.style.width = "100%";
+
+            var thumbnail = document.createElement("img");
+            thumbnail.referrerPolicy = "no-referrer";
+            thumbnail.style.position = "absolute";
+            thumbnail.style.top = "0";
+            thumbnail.style.left = "0";
+            thumbnail.style.width = "100%";
+            thumbnail.style.height = "100%";
+            thumbnail.style.objectFit = "cover";
+
+            var likesOverlay = createCountOverlay("left");
+            var commentsOverlay = createCountOverlay("right");
+            loadReelData(linkPath, thumbnail, likesOverlay, commentsOverlay);
+
+            var video = document.createElement("video");
+            video.muted = true;
+            video.playsInline = true;
+            video.loop = true;
+            video.style.display = "block";
+            video.style.position = "absolute";
+            video.style.top = "0";
+            video.style.left = "0";
+            video.style.width = "100%";
+            video.style.height = "100%";
+            video.style.objectFit = "cover";
+            video.style.zIndex = -1;
+            video.preload = "auto";
+
+            thumbnail.style.transition = "filter 300ms ease, transform 300ms ease";
+            thumbnail.style.filter = "blur(8px)";
+            thumbnail.style.transform = "scale(1.1)";
+            
+            function onVideoReady(){
+                console.log("video ready, removing blur", videoPath);
+                thumbnail.style.filter = "none";
+                thumbnail.style.transform = "scale(1)";
+            }
+            video.addEventListener('canplaythrough', onVideoReady, { once: true });
+
+            var videoSource = document.createElement("source");
+            videoSource.src = "/public/videos/" + videoPath;
+
+            var watchButton = document.createElement("button");
+            watchButton.style.position = "absolute";
+            watchButton.style.top = "90%";
+            watchButton.style.left = "50%";
+            watchButton.classList.add("slide-in-bottom-center-reverse", "btn", "btn-dark", "border", "border-1", "border-light");
+            watchButton.onclick = () => {
+                window.open(linkPath);
+            } 
+            watchButton.innerHTML = "Watch Now";
+
+            video.appendChild(videoSource);
+            if(sectionVideos) sectionVideos.push(video);
+            videoContainer.appendChild(thumbnail);
+            videoContainer.appendChild(video);
+            videoContainer.appendChild(watchButton);
+            videoContainer.appendChild(likesOverlay);
+            videoContainer.appendChild(commentsOverlay);
+            videoContainer.addEventListener('mouseenter', ()=>{
+                video.play();
+                thumbnail.classList.remove("visFade");
+                thumbnail.classList.add("invisFade");
+                watchButton.classList.remove("slide-in-bottom-center-reverse");
+                watchButton.classList.add("slide-in-bottom-center");
+            });
+            videoContainer.addEventListener('mouseleave', async ()=>{
+                
+                thumbnail.classList.remove("invisFade");
+                thumbnail.classList.add("visFade");
+                video.pause();
+                watchButton.classList.remove("slide-in-bottom-center");
+                watchButton.classList.add("slide-in-bottom-center-reverse");
+            
+            });
+
+            return videoContainer;
+        }
+
+        var delayCounter = 1;
+        function createSection({"Name": name, "Videos": videosArray}){
+            var delay = delayCounter * 250;
+            delayCounter++;
+            var sectionVideos = [];
+            var testDiv = createOverallDiv(name, delay, sectionVideos);
+
+            for (var a = 0; a < videosArray.length; a += 4) {
+                var row = createRow();
+                for (var i = 0; i < 4 && a + i < videosArray.length; i++) {
+                    var v = videosArray[a + i];
+                    var column = createColumn(delay + (i + a) * 100);
+                    column.appendChild(createVideo(v["videoPath"], v["link"], sectionVideos));
+                    row.appendChild(column);
+                }
+                testDiv.appendChild(row);
+            }
+        }
+
+        createWebsiteTitle("VERTICAL CONTENT");
+
+        createSection({
+            "Name": "POPULAR REELS",
+            "Videos": [
+                {
+                    "videoPath": "fireAlarmPost.mov",
+                    "link": "https://www.instagram.com/reel/DONAieLDNBL",
+                },
+                {
+                    "videoPath": "healingFreq.mov",
+                    "link": "https://www.instagram.com/reel/DOFlplVjfPS",
+                },
+                {
+                    "videoPath": "purdueShooterPost.mp4",
+                    "link": "https://www.instagram.com/reel/DUxMpQ7jbRH",
+                },
+
+            ]
+        });
+
+        createSection({
+            "Name": "EVENT PROMOTION",
+            "Videos": [
+                {
+                    "videoPath": "verticalHackIndy2.mp4",
+                    "link": "https://www.instagram.com/reel/DVmN9e3jmsU",
+                },
+                {
+                    "videoPath": "glidecamEvent.mp4",
+                    "link": "https://www.instagram.com/reel/DWu4gi3jOYD",
+                },
+                {
+                    "videoPath": "24HRhackindy.mp4",
+                    "link": "https://www.instagram.com/reel/DWXpqkGjmoW",
+                },
+            ],
+        });
+
+        createSection({
+            "Name": "EVENT COVERAGE",
+            "Videos": [
+                {
+                    "videoPath": "ramenEvent.mp4",
+                    "link": "https://www.instagram.com/reel/DQw0yT0E6OP",
+                },
+                {
+                    "videoPath": "labCrawl.mp4",
+                    "link": "https://www.instagram.com/reel/DRPvAvpEQ7o",
+                },
+                {
+                    "videoPath": "purduevolleyball.mp4",
+                    "link": "https://www.instagram.com/reel/DOj1Z7pj4lp",
+                },
+                {
+                    "videoPath": "pieAnOfficer.mp4",
+                    "link": "https://www.instagram.com/reel/DRdebmUEUec",
+                },
+            ],
+        });
+        
+
+    </script>
+    
+    <script src="/public/slideAnimations.js?version=1.0.0"></script>
+
+
+    </body>
+</html>
+

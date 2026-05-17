@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="icon" type="image/jpeg" href="/public/logos/lcm-logo.png">
+
+        <title>Ethan Twu - Short Films</title>
+        <meta name="description" content="Short films by Ethan Twu / ELCM Studio.">
+        <meta name="keywords" content="LeftClickMage, Ethan Twu, short films">
+
+        <link rel="canonical" href="https://ethantwu.com/shortfilms.html">
+        <link rel="stylesheet" href="/public/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/public/fonts/font.css?version=1.0.0">
+        <link rel="stylesheet" href="/public/slideAnimations.css?version=1.0.0">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Special+Gothic+Condensed+One&display=swap" rel="stylesheet">
+        <script src="/public/js/bootstrap.bundle.min.js"></script>
+        <style>
+            body{
+                background-color: rgb(84, 98, 45);
+            }
+        </style>
+    </head>
+    <body>
+
+    <script src="/public/headerDetail.js?version=1.0.0"></script>
+
+    <script>
+        createWebsiteTitle("SHORT FILMS");
+
+        var TITLE_WORKER_URL = "https://ig-thumb.leftclickmage.workers.dev";
+
+        function extractYouTubeId(url){
+            var m = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+            return m ? m[1] : null;
+        }
+
+        function loadImdbTitle(imdbUrl, labelElement){
+            fetch(TITLE_WORKER_URL + "?imdb=" + encodeURIComponent(imdbUrl))
+                .then(r => r.json())
+                .then(data => { if(data.title) labelElement.innerHTML = data.title; })
+                .catch(() => {});
+        }
+
+        function createFilmCard(youtubeUrl, imdbUrl, delay){
+            var id = extractYouTubeId(youtubeUrl);
+            var col = document.createElement("div");
+            col.classList.add("slide", "slide-from-bottom-" + delay, "col-md-6", "mb-4");
+
+            var card = document.createElement("div");
+            card.classList.add("position-relative", "rounded", "text-white");
+            card.style.overflow = "hidden";
+            card.style.aspectRatio = "16 / 9";
+
+            var img = document.createElement("img");
+            img.style.position = "absolute";
+            img.style.top = "0";
+            img.style.left = "0";
+            img.style.width = "100%";
+            img.style.height = "100%";
+            img.style.objectFit = "cover";
+            img.style.transition = "transform 400ms ease";
+            if(id){
+                img.src = "https://i.ytimg.com/vi/" + id + "/maxresdefault.jpg";
+                img.onerror = () => {
+                    img.onerror = null;
+                    img.src = "https://i.ytimg.com/vi/" + id + "/hqdefault.jpg";
+                };
+            }
+
+            var overlay = document.createElement("div");
+            overlay.style.position = "absolute";
+            overlay.style.inset = "0";
+            overlay.style.background = "linear-gradient(to bottom, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 50%)";
+            overlay.style.display = "flex";
+            overlay.style.alignItems = "flex-start";
+            overlay.style.padding = "1rem";
+
+            var label = document.createElement("div");
+            label.classList.add("h4", "mb-0", "fw-bold", "text-uppercase");
+            label.style.textShadow = "0 1px 4px rgba(0,0,0,0.8)";
+            label.innerHTML = "";
+            overlay.appendChild(label);
+            if(imdbUrl) loadImdbTitle(imdbUrl, label);
+
+            var buttonRow = document.createElement("div");
+            buttonRow.style.position = "absolute";
+            buttonRow.style.bottom = "1rem";
+            buttonRow.style.left = "50%";
+            buttonRow.style.transform = "translate(-50%, 200%)";
+            buttonRow.style.display = "flex";
+            buttonRow.style.gap = "1.5rem";
+            buttonRow.classList.add("slide-in-bottom-center-reverse");
+
+            var watchButton = document.createElement("a");
+            watchButton.href = youtubeUrl;
+            watchButton.target = "_blank";
+            watchButton.rel = "noopener";
+            watchButton.classList.add("btn", "btn-dark", "border", "border-1", "border-light", "text-decoration-none");
+            watchButton.innerHTML = "Watch Now";
+            buttonRow.appendChild(watchButton);
+
+            if(imdbUrl){
+                var imdbButton = document.createElement("a");
+                imdbButton.href = imdbUrl;
+                imdbButton.target = "_blank";
+                imdbButton.rel = "noopener";
+                imdbButton.classList.add("btn", "fw-bold", "text-decoration-none", "border", "border-1", "border-dark", "ms-3");
+                imdbButton.style.backgroundColor = "#F5C518";
+                imdbButton.style.color = "#000";
+                imdbButton.innerHTML = "IMDB";
+                buttonRow.appendChild(imdbButton);
+            }
+
+            card.appendChild(img);
+            card.appendChild(overlay);
+            card.appendChild(buttonRow);
+            card.addEventListener("mouseenter", () => {
+                img.style.transform = "scale(1.06)";
+                buttonRow.classList.remove("slide-in-bottom-center-reverse");
+                buttonRow.classList.add("slide-in-bottom-center");
+            });
+            card.addEventListener("mouseleave", () => {
+                img.style.transform = "scale(1)";
+                buttonRow.classList.remove("slide-in-bottom-center");
+                buttonRow.classList.add("slide-in-bottom-center-reverse");
+            });
+
+            col.appendChild(card);
+            return col;
+        }
+
+        function createFilmGrid(films){
+            var container = document.createElement("div");
+            container.classList.add("container", "my-5");
+            var row = document.createElement("div");
+            row.classList.add("row", "g-4");
+            films.forEach((film, i) => {
+                row.appendChild(createFilmCard(film.link, film.imdb, 250 + i * 100));
+            });
+            container.appendChild(row);
+            document.body.appendChild(container);
+        }
+
+        createFilmGrid([
+            { link: "https://www.youtube.com/watch?v=TqxmwFEXPEY", imdb: "https://www.imdb.com/title/tt40571618/" },
+            { link: "https://www.youtube.com/watch?v=XTsR48f3Moo", imdb: "https://www.imdb.com/title/tt41282342/" },
+            { link: "https://www.youtube.com/watch?v=gd_cR9CkMzM", imdb: "https://www.imdb.com/title/tt41306571/" },
+        ]);
+    </script>
+
+    <script src="/public/slideAnimations.js?version=1.0.0"></script>
+
+    </body>
+</html>

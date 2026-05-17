@@ -1,0 +1,8 @@
+#backgroundVideo{
+    position: fixed;
+    min-width: 101%;
+    min-height: 101%;
+    left:0;
+    top:0;
+    filter: brightness(70%);
+}

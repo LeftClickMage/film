@@ -1,0 +1,17 @@
+
+  .glowWhite {
+  text-shadow: 0 0 8px #aeb9d9, 0 0 12px #aeb9d9, 0 0 6px #FFFFFF;
+ }
+ 
+    *{
+        font-family: "Special Gothic Condensed One", sans-serif;
+        font-weight: 400;
+        font-style: normal;
+        user-select: none;
+    }
+    .display-massive{
+        font-size:8rem;
+    }
+.underlineText{
+    text-decoration:underline;
+}
