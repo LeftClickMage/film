@@ -10,7 +10,7 @@
         user-select: none;
     }
     .display-massive{
-        font-size:8rem;
+        font-size: clamp(3rem, 10vw, 8rem);
     }
 .underlineText{
     text-decoration:underline;

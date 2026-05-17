@@ -68,7 +68,7 @@
 
         function createOverallDiv(title, delay, sectionVideos){
             var overallDiv = document.createElement("div");
-            overallDiv.classList.add("container", "my-5");
+            overallDiv.classList.add("container", "mb-5");
             document.body.appendChild(overallDiv);
             overallDiv.appendChild(createTitle(title, delay, sectionVideos));
             return overallDiv;
@@ -104,7 +104,7 @@
 
         function createColumn(delay){
             var column = document.createElement("div");
-            column.classList.add("slide", "slide-in-bottom-" + delay, "col-xl-3", "col-sm-6");
+            column.classList.add("slide", "slide-in-bottom-" + delay, "col-xl-3", "col-6");
             return column;
         }
 
@@ -189,7 +189,7 @@
                 videoContainer.style.cursor = "pointer";
             }
             videoContainer.style.cursor = "wait";
-            video.addEventListener('canplaythrough', onVideoReady, { once: true });
+            video.addEventListener('loadeddata', onVideoReady, { once: true });
 
             var videoSource = document.createElement("source");
             videoSource.src = "https://elcmbucket.ethantwu.com/" + videoPath;
@@ -198,10 +198,13 @@
             watchButton.style.position = "absolute";
             watchButton.style.top = "90%";
             watchButton.style.left = "50%";
+            watchButton.style.fontSize = "clamp(0.65rem, 1.5vw, 1rem)";
+            watchButton.style.padding = "clamp(0.2rem, 0.8vw, 0.5rem) clamp(0.5rem, 1.5vw, 1rem)";
+            watchButton.style.whiteSpace = "nowrap";
             watchButton.classList.add("slide-in-bottom-center-reverse", "btn", "btn-dark", "border", "border-1", "border-light");
             watchButton.onclick = () => {
                 window.open(linkPath);
-            } 
+            }
             watchButton.innerHTML = "Watch Now";
 
             video.appendChild(videoSource);
@@ -211,15 +214,24 @@
             videoContainer.appendChild(watchButton);
             videoContainer.appendChild(likesOverlay);
             videoContainer.appendChild(commentsOverlay);
+            var hoverTimeout = null;
             videoContainer.addEventListener('mouseenter', ()=>{
                 if(!videoReady) return;
-                video.play();
-                thumbnail.classList.remove("visFade");
-                thumbnail.classList.add("invisFade");
-                watchButton.classList.remove("slide-in-bottom-center-reverse");
-                watchButton.classList.add("slide-in-bottom-center");
+                hoverTimeout = setTimeout(() => {
+                    hoverTimeout = null;
+                    video.play();
+                    thumbnail.classList.remove("visFade");
+                    thumbnail.classList.add("invisFade");
+                    watchButton.classList.remove("slide-in-bottom-center-reverse");
+                    watchButton.classList.add("slide-in-bottom-center");
+                }, 150);
             });
-            videoContainer.addEventListener('mouseleave', async ()=>{
+            videoContainer.addEventListener('mouseleave', ()=>{
+                if(hoverTimeout != null){
+                    clearTimeout(hoverTimeout);
+                    hoverTimeout = null;
+                    return;
+                }
                 if(!videoReady) return;
                 thumbnail.classList.remove("invisFade");
                 thumbnail.classList.add("visFade");

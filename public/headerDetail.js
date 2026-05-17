@@ -43,7 +43,7 @@ function createMainTitle(title, belowContent){
 
 function createWebsiteTitle(title){
     document.write(`
-        <div class="d-flex align-items-center" style="min-height:45vh;">
+        <div class="d-flex align-items-center" style="min-height: clamp(35vh, 40vw, 45vh);">
             <div class="container-md text-center mt-5">
                 <h1 class="slide slide-in-title-175 display-massive fw-bold text-white text-center glowWhite" style="opacity:0;">` + title + `</h1>
             </div>
