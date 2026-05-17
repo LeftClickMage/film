@@ -1,7 +1,7 @@
 document.write(`
     
     <!-- Nav Code -->
-    <script src="/public/navigation/homeNav.js?version=1.0.0"></script>
+    <script src="/public/navigation/homeNav.js?version=1.0.1"></script>
     <script src="/public/downtime.js"></script>
 
 

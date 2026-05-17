@@ -113,13 +113,17 @@ document.write(`
 
 
 
-var pathName = window.location.pathname;
-if (pathName == "/index.html" || pathName == "/"){
+function normalizePath(p){
+    return p.replace(/\.html$/, "").replace(/\/$/, "") || "/";
+}
+
+var pathName = normalizePath(window.location.pathname);
+if (pathName === "/" || pathName === "/index"){
     document.getElementById("linkLogoNavbar").classList.add("homeLogoNavbarActive");
 }
 
 document.querySelectorAll("#collapse .nav-link").forEach(link => {
-    var linkPath = new URL(link.href).pathname;
+    var linkPath = normalizePath(new URL(link.href).pathname);
     if (linkPath === pathName) {
         link.classList.add("active");
     }
