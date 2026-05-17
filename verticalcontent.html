@@ -66,6 +66,8 @@
 
     <script>
 
+        var IS_MOBILE = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+
         function createOverallDiv(title, delay, sectionVideos){
             var overallDiv = document.createElement("div");
             overallDiv.classList.add("container", "mb-5");
@@ -82,16 +84,18 @@
             titleParagraph.classList.add("h1", "text-light", "mb-0");
             container.appendChild(titleParagraph);
 
-            var muteButton = document.createElement("button");
-            muteButton.classList.add("btn", "btn-outline-light", "btn-sm", "mb-2");
-            muteButton.innerHTML = "UNMUTE";
-            var muted = true;
-            muteButton.onclick = () => {
-                muted = !muted;
-                sectionVideos.forEach(v => { v.muted = muted; });
-                muteButton.innerHTML = muted ? "UNMUTE" : "MUTE";
-            };
-            container.appendChild(muteButton);
+            if(!IS_MOBILE){
+                var muteButton = document.createElement("button");
+                muteButton.classList.add("btn", "btn-outline-light", "btn-sm", "mb-2");
+                muteButton.innerHTML = "UNMUTE";
+                var muted = true;
+                muteButton.onclick = () => {
+                    muted = !muted;
+                    sectionVideos.forEach(v => { v.muted = muted; });
+                    muteButton.innerHTML = muted ? "UNMUTE" : "MUTE";
+                };
+                container.appendChild(muteButton);
+            }
 
             return container;
         }
@@ -141,8 +145,6 @@
             el.style.pointerEvents = "none";
             return el;
         }
-
-        var IS_MOBILE = "ontouchstart" in window || navigator.maxTouchPoints > 0;
 
         function createVideo(videoPath, linkPath, sectionVideos){
             var videoContainer = document.createElement("div");
