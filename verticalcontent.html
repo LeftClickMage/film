@@ -58,7 +58,7 @@
     </head>
     <body>
 
-    <script src="/public/headerDetail.js?version=1.0.0"></script>
+    <script src="/public/headerDetail.js?version=1.0.1"></script>
 
     
 
@@ -182,6 +182,7 @@
             
             var videoReady = false;
             function onVideoReady(){
+                if(videoReady) return;
                 console.log("video ready, removing blur", videoPath);
                 videoReady = true;
                 thumbnail.style.filter = "none";
@@ -189,7 +190,9 @@
                 videoContainer.style.cursor = "pointer";
             }
             videoContainer.style.cursor = "wait";
-            video.addEventListener('loadeddata', onVideoReady, { once: true });
+            video.addEventListener('loadeddata', onVideoReady);
+            video.addEventListener('loadedmetadata', onVideoReady);
+            video.addEventListener('canplay', onVideoReady);
 
             var videoSource = document.createElement("source");
             videoSource.src = "https://elcmbucket.ethantwu.com/" + videoPath;
@@ -208,12 +211,28 @@
             watchButton.innerHTML = "Watch Now";
 
             video.appendChild(videoSource);
+            video.load();
+            var isMobile = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+            if(isMobile) setTimeout(onVideoReady, 10000);
             if(sectionVideos) sectionVideos.push(video);
             videoContainer.appendChild(thumbnail);
             videoContainer.appendChild(video);
             videoContainer.appendChild(watchButton);
             videoContainer.appendChild(likesOverlay);
             videoContainer.appendChild(commentsOverlay);
+
+            var visibilityObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if(!entry.isIntersecting && !video.paused){
+                        video.pause();
+                        thumbnail.classList.remove("invisFade");
+                        thumbnail.classList.add("visFade");
+                        watchButton.classList.remove("slide-in-bottom-center");
+                        watchButton.classList.add("slide-in-bottom-center-reverse");
+                    }
+                });
+            }, { threshold: 0 });
+            visibilityObserver.observe(videoContainer);
             var hoverTimeout = null;
             videoContainer.addEventListener('mouseenter', ()=>{
                 if(!videoReady) return;
