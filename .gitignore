@@ -15,3 +15,10 @@ yarn-error.log*
 .vscode/
 .idea/
 *.swp
+
+# Large media (hosted on R2)
+public/videos/*.mp4
+public/videos/*.mov
+public/videos/*.webm
+public/backgrounds/*.mp4
+public/backgrounds/*.mov

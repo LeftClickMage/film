@@ -7,7 +7,7 @@ document.write(`
 
     <!-- Background Code-->
     <video autoplay muted loop id="backgroundVideo" style="z-index:-1000;">
-        <source src="/public/backgrounds/anamorphicBackground.mp4" type="video/mp4">
+        <source src="https://elcmbucket.ethantwu.com/anamorphicBackground.mp4" type="video/mp4">
     </video>
     <link rel="stylesheet" href="/public/backgrounds/background.css">
     <script src="/public/backgrounds/index.js?version=1.0.0"></script>
