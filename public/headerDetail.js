@@ -7,7 +7,7 @@ document.write(`
 
     <!-- Background Code-->
     <img id="backgroundPoster" src="/public/backgrounds/anamorphicBackground.jpg" style="z-index:-999;">
-    <video autoplay muted loop id="backgroundVideo" style="z-index:-1000;">
+    <video autoplay muted loop playsinline disablepictureinpicture disableremoteplayback id="backgroundVideo" style="z-index:-1000; pointer-events:none;" controlslist="nodownload noplaybackrate nofullscreen">
         <source src="https://elcmbucket.ethantwu.com/anamorphicBackground.mp4" type="video/mp4">
     </video>
     <link rel="stylesheet" href="/public/backgrounds/background.css">
