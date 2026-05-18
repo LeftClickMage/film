@@ -52,16 +52,29 @@
             descEl.innerHTML = description;
             card.appendChild(descEl);
 
+            var priceRow = document.createElement("div");
+            priceRow.classList.add("d-flex", "justify-content-between", "align-items-center", "border-top", "border-light", "pt-3");
+
+            var priceCol = document.createElement("div");
             var costEl = document.createElement("p");
-            costEl.classList.add("h2", "fw-bold", "mb-3", "border-top", "border-light", "pt-3");
+            costEl.classList.add("h2", "fw-bold", "mb-0");
             costEl.innerHTML = cost;
-            card.appendChild(costEl);
+            priceCol.appendChild(costEl);
+
+            var varyEl = document.createElement("p");
+            varyEl.classList.add("small", "fst-italic", "mb-0");
+            varyEl.style.opacity = "0.6";
+            varyEl.innerHTML = "Prices may vary";
+            priceCol.appendChild(varyEl);
 
             var inquireButton = document.createElement("a");
             inquireButton.classList.add("btn", "btn-outline-light", "btn-lg", "fs-5", "text-decoration-none");
             inquireButton.href = "mailto:elcm@ethantwu.com?subject=" + encodeURIComponent("Package Inquiry: " + title);
             inquireButton.innerHTML = "INQUIRE";
-            card.appendChild(inquireButton);
+
+            priceRow.appendChild(priceCol);
+            priceRow.appendChild(inquireButton);
+            card.appendChild(priceRow);
 
             col.appendChild(card);
             return col;
@@ -82,17 +95,17 @@
         createPackageGrid([
             {
                 title: "Event Coverage",
-                description: "1x Vertical Video",
+                description: "1x Vertical Video<br>2x Revisions",
                 cost: "$100",
             },
             {
                 title: "Promotional Video",
-                description: "1x Vertical Video",
+                description: "1x Vertical Video<br>2x Revisions",
                 cost: "$150",
             },
             {
                 title: "Cinematography / DOP",
-                description: "Kit Included",
+                description: "Kit Included<br>Kit Fee $50/day<br>Colorist $100",
                 cost: "$150 / day",
             },
         ]);
