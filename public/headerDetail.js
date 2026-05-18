@@ -1,7 +1,7 @@
 document.write(`
     
     <!-- Nav Code -->
-    <script src="/public/navigation/homeNav.js?version=1.0.1"></script>
+    <script src="/public/navigation/homeNav.js?version=1.0.2"></script>
     <script src="/public/downtime.js"></script>
 
 
@@ -54,7 +54,7 @@ function createWebsiteTitle(title){
 function createMainText(text){
     document.write(`
         <div class="container my-5">
-            <p class="h1 text-light mb-0">` + text + `</p>
+            <p class="slide slide-from-top-500 h1 text-light mb-0" style="opacity:0;">` + text + `</p>
         </div>
     `);
 }

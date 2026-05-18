@@ -93,7 +93,11 @@ document.write(`
                     <li class="nav-item">
                         <a class="nav-link font-increase-2x" href="/shortfilms.html" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Ethan's Short Films" id="shortfilms"><span class="linkText">SHORT FILMS</span></a>
                     </li>
-                    
+
+                    <li class="nav-item">
+                        <a class="nav-link font-increase-2x" href="/packages.html" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Client Packages" id="packages"><span class="linkText">PACKAGES</span></a>
+                    </li>
+
                 </ul>
                 <ul class="navbar-nav ms-auto me-md-2 align-items-md-center">
                     <li class="nav-item">

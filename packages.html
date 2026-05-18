@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="icon" type="image/jpeg" href="/public/logos/lcm-logo.png">
+
+        <title>Ethan Twu - Client Packages</title>
+        <meta name="description" content="Client packages offered by Ethan Twu / ELCM Studio.">
+        <meta name="keywords" content="LeftClickMage, Ethan Twu, packages, pricing, video">
+
+        <link rel="canonical" href="https://ethantwu.com/packages.html">
+        <link rel="stylesheet" href="/public/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/public/fonts/font.css?version=1.0.0">
+        <link rel="stylesheet" href="/public/slideAnimations.css?version=1.0.0">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Special+Gothic+Condensed+One&display=swap" rel="stylesheet">
+        <script src="/public/js/bootstrap.bundle.min.js"></script>
+        <style>
+            body{
+                background-color: rgb(84, 98, 45);
+            }
+        </style>
+    </head>
+    <body>
+
+    <script src="/public/headerDetail.js?version=1.0.5"></script>
+
+    <script>
+        createWebsiteTitle("CLIENT PACKAGES");
+        createMainText("If you cannot find your desired package, feel free to contact me!");
+
+        function createPackageCard(title, description, cost, delay){
+            var col = document.createElement("div");
+            col.classList.add("slide", "slide-from-bottom-" + delay, "col-lg-4", "col-md-6", "mb-4");
+
+            var card = document.createElement("div");
+            card.classList.add("rounded", "border", "border-2", "border-light", "text-white", "h-100", "d-flex", "flex-column");
+            card.style.backgroundColor = "rgba(0, 0, 0, 0.6)";
+            card.style.padding = "1.5rem";
+
+            var titleEl = document.createElement("p");
+            titleEl.classList.add("h3", "fw-bold", "text-uppercase", "mb-3");
+            titleEl.innerHTML = title;
+            card.appendChild(titleEl);
+
+            var descEl = document.createElement("p");
+            descEl.classList.add("mb-4", "flex-grow-1");
+            descEl.style.opacity = "0.85";
+            descEl.innerHTML = description;
+            card.appendChild(descEl);
+
+            var costEl = document.createElement("p");
+            costEl.classList.add("h2", "fw-bold", "mb-3", "border-top", "border-light", "pt-3");
+            costEl.innerHTML = cost;
+            card.appendChild(costEl);
+
+            var inquireButton = document.createElement("a");
+            inquireButton.classList.add("btn", "btn-outline-light", "btn-lg", "fs-5", "text-decoration-none");
+            inquireButton.href = "mailto:elcm@ethantwu.com?subject=" + encodeURIComponent("Package Inquiry: " + title);
+            inquireButton.innerHTML = "INQUIRE";
+            card.appendChild(inquireButton);
+
+            col.appendChild(card);
+            return col;
+        }
+
+        function createPackageGrid(packages){
+            var container = document.createElement("div");
+            container.classList.add("container", "my-5");
+            var row = document.createElement("div");
+            row.classList.add("row", "g-4");
+            packages.forEach((p, i) => {
+                row.appendChild(createPackageCard(p.title, p.description, p.cost, 250 + i * 100));
+            });
+            container.appendChild(row);
+            document.body.appendChild(container);
+        }
+
+        createPackageGrid([
+            {
+                title: "Event Coverage",
+                description: "1x Vertical Video",
+                cost: "$100",
+            },
+            {
+                title: "Promotional Video",
+                description: "1x Vertical Video",
+                cost: "$150",
+            },
+            {
+                title: "Cinematography / DOP",
+                description: "Kit Included",
+                cost: "$150 / day",
+            },
+        ]);
+    </script>
+
+    <script src="/public/slideAnimations.js?version=1.0.0"></script>
+
+    </body>
+</html>
